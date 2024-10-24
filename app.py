@@ -21,9 +21,17 @@ st.set_page_config(
 
 # Dicionário de usuários
 USERS_DB = {
-    'gabriel@aperdata.com': {'password': 'gabriel123', 'name': 'Administrador'},
-    'maria@psicoiapro.com': {'password': 'maria123', 'name': 'Maria Silva'},
-    'joao@psicoiapro.com': {'password': 'joao123', 'name': 'João Santos'}
+    'gabriel@aperdata.com': {'password': 'gabriel123', 'name': 'Gabriel'},
+    'maria@psicoiapro.com': {'password': 'maria123', 'name': 'Maria'},
+    'joao@psicoiapro.com': {'password': 'joao123', 'name': 'João'},
+    'franciellyangelica': {'password': 'guMcyWdY', 'name': 'Francielly'},
+    'stephanysantos': {'password': '1SwiFlHB', 'name': 'Stephany'},
+    'lucimaragoncalves': {'password': 'Glk4ACw8', 'name': 'Lucimara'},
+    'karinysousa': {'password': '3dPfVYe6', 'name': 'Kariny'},
+    'pamelade': {'password': 'vhBCyJkO', 'name': 'Pâmela'},
+    'biancakatherine': {'password': 'ch7p9sf8', 'name': 'Bianca'},
+    'adrianarivani': {'password': 'XtPF8P4N', 'name': 'Adriana'},
+    'lucilenegregorio': {'password': 'Luc123Gr', 'name': 'Lucilene'}
 }
 
 # Constantes e configurações
