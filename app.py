@@ -315,33 +315,8 @@ def create_prompt(report_type, tone, patient_data, specific_fields):
     
     return base_template
 
-def get_openai_api_key():
-    """Obtém a chave da API do OpenAI dos secrets do Streamlit"""
-    try:
-        api_key = st.secrets["OPENAI_API_KEY"]
-        if not api_key:
-            raise ValueError("API key está vazia")
-        return api_key
-    except Exception as e:
-        st.error(f"Erro ao carregar a chave da API: {str(e)}")
-        st.error("Verifique se as secrets estão configuradas corretamente.")
-        return None
-
-def initialize_openai():
-    """Inicializa a configuração do OpenAI"""
-    api_key = get_openai_api_key()
-    if api_key is None:
-        st.stop()
-    
-    os.environ['OPENAI_API_KEY'] = api_key
-    return ChatOpenAI(
-        model_name='gpt-4-turbo',
-        temperature=0.7
-    )
-
 def main():
-    # Inicializa o OpenAI no início da aplicação
-    llm = initialize_openai()
+    # Inicializa o estado da sessão
     if 'logged_in' not in st.session_state:
         st.session_state['logged_in'] = False
 
@@ -427,33 +402,60 @@ def main():
             specific_fields = get_specific_fields(REPORT_TYPES[report_type])
 
         with tab3:
-           if st.button("Gerar Relatório"):
-            try:
-                patient_data = {
-                    "nome": nome,
-                    "idade": idade,
-                    "genero": genero,
-                    "data_avaliacao": data_avaliacao.strftime("%d/%m/%Y"),
-                    "abordagem_terapeutica": abordagem_terapeutica
-                }
-                
-                prompt = create_prompt(report_type, tone, patient_data, specific_fields)
-                
-                with st.spinner("Gerando relatório..."):
-                    response = llm.invoke(prompt)
-                    docx_file = convert_markdown_to_docx(response.content)
-                    
-                    st.success("Relatório gerado com sucesso!")
-                    st.markdown(response.content)
+            if st.button("Gerar Relatório"):
+                try:
+                    # Usa st.secrets em vez de config.yaml
+                    api_key = st.secrets["OPENAI_API_KEY"]
+                    os.environ['OPENAI_API_KEY'] = api_key
 
-                    st.download_button(
-                        "Download Relatório (DOCX)",
-                        docx_file,
-                        f"relatorio_{REPORT_TYPES[report_type]}_{datetime.now().strftime('%Y%m%d')}.docx",
-                        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                    model = ChatOpenAI(
+                        model_name='gpt-4-turbo',
+                        temperature=0.7
                     )
-            except Exception as e:
-                st.error(f"Erro ao gerar relatório: {str(e)}")
+
+                    patient_data = {
+                        "nome": nome,
+                        "idade": idade,
+                        "genero": genero,
+                        "data_avaliacao": data_avaliacao.strftime("%d/%m/%Y"),
+                        "abordagem_terapeutica": abordagem_terapeutica
+                    }
+                    
+                    prompt = create_prompt(report_type, tone, patient_data, specific_fields)
+                    
+                    with st.spinner("Gerando relatório..."):
+                        response = model.invoke(prompt)
+                        docx_file = convert_markdown_to_docx(response.content)
+                        
+                        st.success("Relatório gerado com sucesso!")
+                        st.markdown(response.content)
+
+                        st.download_button(
+                            "Download Relatório (DOCX)",
+                            docx_file,
+                            f"relatorio_{REPORT_TYPES[report_type]}_{datetime.now().strftime('%Y%m%d')}.docx",
+                            "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                        )
+                except Exception as e:
+                    st.error(f"Erro ao gerar relatório: {str(e)}")
+
+    elif menu_selection == "Configurações":
+        st.title("Configurações")
+        st.write("Área em desenvolvimento...")
+
+    elif menu_selection == "Sobre":
+        st.title("Sobre o PsicoIA Pro")
+        st.markdown("""
+        O PsicoIA Pro é uma ferramenta avançada de inteligência artificial desenvolvida 
+        para otimizar e elevar a qualidade da geração de relatórios psicológicos.
+        
+        ### Recursos
+        - 17 tipos diferentes de relatórios psicológicos
+        - Seleção de tom para personalização
+        - Interface intuitiva e profissional
+        - Integração com IA avançada
+        - Formato padronizado seguindo normas técnicas
+        """)
 
 if __name__ == "__main__":
-    main()
+    main()                                               
