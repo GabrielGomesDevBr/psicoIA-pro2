@@ -1,6 +1,6 @@
 import streamlit as st
 import logging
-from langchain.chat_models import ChatOpenAI
+from langchain_openai import ChatOpenAI  # Mudou aqui
 from langchain.prompts import PromptTemplate
 import os
 import yaml
