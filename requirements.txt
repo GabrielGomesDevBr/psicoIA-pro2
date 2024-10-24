@@ -1,5 +1,5 @@
-streamlit==1.24.0          # Versão específica do Streamlit
-langchain==0.0.300         # Substitua pela versão correta que você usa
-pyyaml==6.0                # Para trabalhar com arquivos YAML
-python-docx==0.8.11       # Para manipulação de documentos Word
-markdown==3.4.3            # Para conversão de texto Markdown
+streamlit==1.24.0
+langchain==0.0.300      
+pyyaml==6.0
+python-docx==0.8.11
+markdown==3.4.3
