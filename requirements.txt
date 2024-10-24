@@ -1,0 +1,6 @@
+streamlit
+langchain
+openai
+python-docx
+pyyaml
+markdown
